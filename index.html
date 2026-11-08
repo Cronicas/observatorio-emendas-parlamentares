@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Observatório de propostas de emendas parlamentares às LOAs de 2020 a 2023.">
+  <title>Observatório de Emendas Parlamentares | 2020–2023</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <script type="importmap">{"imports":{"@duckdb/duckdb-wasm":"https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.1/+esm"}}</script>
+  <script type="module" src="./js/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner"><a href="./" class="brand"><span class="brand-icon">◈</span><span>OBSERVATÓRIO <small>DE EMENDAS PARLAMENTARES</small></span></a><span class="year-pill">LOAs 2020–2023</span></div>
+  </header>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">DADOS ABERTOS · PESQUISA ORÇAMENTÁRIA</div>
+      <h1>Explore as propostas de emendas parlamentares</h1>
+      <p>Consulte emendas apresentadas aos projetos de lei orçamentária, compare exercícios e examine autores, áreas, localidades e valores propostos.</p>
+      <div class="disclaimer"><strong>Importante:</strong> os dados representam propostas extraídas dos formulários das LOAs, não emendas necessariamente aprovadas, empenhadas ou pagas.</div>
+    </section>
+    <div id="status" class="status" role="status" aria-live="polite">Inicializando consulta aos dados…</div>
+    <section class="metrics" aria-label="Indicadores">
+      <article class="metric"><span>Emendas encontradas</span><strong id="m-total">—</strong><small>Conforme filtros aplicados</small></article>
+      <article class="metric"><span>Valor proposto</span><strong id="m-valor">—</strong><small>Soma dos valores informados (R$)</small></article>
+      <article class="metric"><span>Autores distintos</span><strong id="m-autores">—</strong><small>Nomes identificados na base</small></article>
+      <article class="metric"><span>Exercícios</span><strong id="m-anos">—</strong><small>Com registros encontrados</small></article>
+    </section>
+    <section class="workspace">
+      <aside class="panel filters">
+        <div class="panel-heading"><h2>Filtros de consulta</h2><button type="button" id="limpar" class="linkbtn">Limpar</button></div>
+        <label for="busca">Busca geral</label><input id="busca" type="search" placeholder="Autor, número, emenda, localidade…" autocomplete="off">
+        <label for="ano">Exercício</label><select id="ano"><option value="">Todos os anos</option></select>
+        <label for="autor">Autor parlamentar</label><select id="autor"><option value="">Todos os autores</option></select>
+        <label for="tipo">Tipo de emenda</label><select id="tipo"><option value="">Todos os tipos</option></select>
+        <label for="area">Área de governo</label><select id="area"><option value="">Todas as áreas</option></select>
+        <label for="esfera">Esfera orçamentária</label><select id="esfera"><option value="">Todas as esferas</option></select>
+        <button id="aplicar" type="button" class="primary">Aplicar filtros</button>
+        <p class="help">Campos ausentes na fonte são apresentados como “Não informado”. Os filtros consideram os valores efetivamente registrados.</p>
+      </aside>
+      <div class="results">
+        <section class="panel visuals"><div class="panel-heading"><h2>Distribuição das propostas</h2><span class="hint">Quantidade de registros</span></div><div class="visual-grid"><div><h3>Por exercício</h3><div id="chart-ano" class="bars"></div></div><div><h3>Principais áreas de governo</h3><div id="chart-area" class="bars"></div></div></div></section>
+        <section class="panel tablepanel"><div class="panel-heading tablehead"><div><h2>Emendas encontradas</h2><p id="summary" class="hint">Aguardando dados…</p></div><div class="actions"><button type="button" id="exportar" class="secondary" disabled>Exportar CSV filtrado</button></div></div>
+          <div class="tablewrap"><table><thead><tr><th>Ano</th><th>Nº da emenda</th><th>Autor</th><th>Tipo</th><th>Área de governo</th><th>Valor proposto</th><th>Detalhes</th></tr></thead><tbody id="linhas"><tr><td colspan="7" class="empty">Carregando registros…</td></tr></tbody></table></div>
+          <div class="pagination"><span id="pageinfo" class="hint">—</span><div><button id="anterior" type="button" class="secondary" disabled>Anterior</button><button id="proxima" type="button" class="secondary" disabled>Próxima</button></div></div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <dialog id="detalhe"><div class="modal-heading"><h2>Ficha da emenda</h2><button id="fechar" aria-label="Fechar detalhes" type="button" class="secondary">Fechar</button></div><div id="detalhe-corpo" class="details"></div></dialog>
+  <footer class="shell footer">Observatório de Emendas Parlamentares · LOAs 2020–2023 · Dados de propostas, sujeitos às limitações da extração documental.</footer>
+</body>
+</html>
