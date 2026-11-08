@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./css/style.css">
   <script type="importmap">{"imports":{"@duckdb/duckdb-wasm":"https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.30.0/+esm"}}</script>
   <script type="module" src="./js/app.js"></script>
+  <script type="module" src="./js/glossario.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -27,7 +28,8 @@
       <article class="metric"><span>Autores distintos</span><strong id="m-autores">—</strong><small>Nomes identificados na base</small></article>
       <article class="metric"><span>Exercícios</span><strong id="m-anos">—</strong><small>Com registros encontrados</small></article>
     </section>
-    <section class="workspace">
+    <nav class="quick-links" aria-label="Atalhos"><a href="#consulta">Consulta de emendas</a><a href="#glossario">Dicionário orçamentário</a></nav>
+    <section class="workspace" id="consulta">
       <aside class="panel filters">
         <div class="panel-heading"><h2>Filtros de consulta</h2><button type="button" id="limpar" class="linkbtn">Limpar</button></div>
         <label for="busca">Busca geral</label><input id="busca" type="search" placeholder="Autor, número, emenda, localidade…" autocomplete="off">
@@ -47,7 +49,17 @@
         </section>
       </div>
     </section>
+    <section class="panel glossary-section" id="glossario" aria-labelledby="glossario-titulo">
+      <div class="panel-heading"><div><div class="eyebrow">FONTE INSTITUCIONAL · EDIÇÃO 2020</div><h2 id="glossario-titulo">Dicionário de termos orçamentários</h2><p class="glossary-description">Definições transcritas do glossário publicado conjuntamente pela Câmara dos Deputados e pelo Senado Federal. Selecione um verbete para consultar sua definição, referências e página. Não há geração de respostas por IA.</p></div></div>
+      <label for="glossario-busca">Pesquisar conceito, sigla ou palavra na definição</label>
+      <input id="glossario-busca" type="search" placeholder="Ex.: emenda individual, empenho, função..." autocomplete="off">
+      <p id="glossario-status" class="hint" role="status" aria-live="polite">Carregando dicionário…</p>
+      <div id="glossario-lista" class="glossary-list"></div>
+      <button id="glossario-mais" class="secondary" type="button" hidden>Mostrar mais verbetes</button>
+      <p class="glossary-footnote">Fonte: Congresso Nacional, <em>Glossário de Termos Orçamentários</em>, 2020. Transcrição automatizada sujeita a conferência editorial; referências normativas podem ter sofrido alterações posteriores.</p>
+    </section>
   </main>
+  <dialog id="glossario-dialogo" class="glossary-dialog"><div class="modal-heading"><h2 id="glossario-termo">Verbete</h2><button id="glossario-fechar" type="button" class="secondary">Fechar</button></div><div id="glossario-corpo"></div></dialog>
   <dialog id="detalhe"><div class="modal-heading"><h2>Ficha da emenda</h2><button id="fechar" aria-label="Fechar detalhes" type="button" class="secondary">Fechar</button></div><div id="detalhe-corpo" class="details"></div></dialog>
   <footer class="shell footer">Observatório de Emendas Parlamentares · LOAs 2020–2023 · Dados de propostas, sujeitos às limitações da extração documental.</footer>
 </body>
