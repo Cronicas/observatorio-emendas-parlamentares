@@ -23,12 +23,12 @@
       <div class="eyebrow">DADOS ABERTOS · PESQUISA ORÇAMENTÁRIA</div>
       <h1>Explore as propostas de emendas parlamentares</h1>
       <p>Consulte emendas apresentadas aos projetos de lei orçamentária, compare exercícios e examine autores, áreas, localidades e valores propostos.</p>
-      <div class="disclaimer"><strong>Importante:</strong> os dados representam propostas extraídas dos formulários das LOAs, não emendas necessariamente aprovadas, empenhadas ou pagas.</div>
+      <div class="disclaimer"><strong>Importante:</strong> os dados representam propostas extraídas dos formulários das LOAs, não emendas necessariamente aprovadas, empenhadas ou pagas. A soma de valores está temporariamente em revisão: propostas de acréscimo, remanejamento e cancelamento não devem ser somadas indistintamente, nem comparadas diretamente com o limite anual por parlamentar.</div>
     </section>
     <div id="status" class="status" role="status" aria-live="polite">Inicializando consulta aos dados…</div>
     <section class="metrics" aria-label="Indicadores">
       <article class="metric"><span>Emendas encontradas</span><strong id="m-total">—</strong><small>Conforme filtros aplicados</small></article>
-      <article class="metric"><span>Valor proposto</span><strong id="m-valor">—</strong><small>Soma dos valores informados (R$)</small></article>
+      <article class="metric"><span>Valores orçamentários</span><strong id="m-valor">Em revisão</strong><small>Acréscimos e cancelamentos exigem apuração separada</small></article>
       <article class="metric"><span>Autores distintos</span><strong id="m-autores">—</strong><small>Nomes identificados na base</small></article>
       <article class="metric"><span>Exercícios</span><strong id="m-anos">—</strong><small>Com registros encontrados</small></article>
     </section>
@@ -39,7 +39,9 @@
         <label for="busca">Busca geral</label><input id="busca" type="search" placeholder="Autor, número, emenda, localidade…" autocomplete="off">
         <label for="ano">Exercício</label><select id="ano"><option value="">Todos os anos</option></select>
         <label for="autor">Autor parlamentar</label><select id="autor"><option value="">Todos os autores</option></select>
+        <label for="cargo">Cargo do autor</label><select id="cargo"><option value="">Todos os cargos</option></select>
         <label for="tipo">Tipo de emenda</label><select id="tipo"><option value="">Todos os tipos</option></select>
+        <label for="realizacao">Tipo de realização</label><select id="realizacao"><option value="">Todos os tipos de realização</option></select>
         <label for="area">Área de governo</label><select id="area"><option value="">Todas as áreas</option></select>
         <label for="esfera">Esfera orçamentária</label><select id="esfera"><option value="">Todas as esferas</option></select>
         <button id="aplicar" type="button" class="primary">Aplicar filtros</button>
