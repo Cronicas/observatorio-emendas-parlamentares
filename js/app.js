@@ -17,7 +17,7 @@ function status(message, error=false) { el('status').textContent = message; el('
 async function query(sql) { return rows(await conn.query(sql)); }
 function filters() {
   const clauses = [];
-  for (const [id, column] of [['ano','ano'],['autor','nome_autor'],['tipo','tipo_emenda'],['area','area_governo'],['esfera','esfera_orcamentaria']]) {
+  for (const [id, column] of [['ano','ano'],['autor','nome_autor'],['tipo','tipo_emenda'],['cargo','cargo_autor'],['realizacao','tipo_realizacao'],['area','area_governo'],['esfera','esfera_orcamentaria']]) {
     const value = el(id).value;
     if (value) clauses.push(id === 'ano' ? `${column} = ${Number(value)}` : `${column} = ${quote(value)}`);
   }
@@ -51,12 +51,12 @@ async function refresh() {
   try {
     activeWhere=filters();page=0;
     const [[metrics],byYear,byArea] = await Promise.all([
-      query(`SELECT COUNT(*) AS total, SUM(valor_proposto_reais) AS valor, COUNT(DISTINCT NULLIF(TRIM(nome_autor),'')) AS autores, COUNT(DISTINCT ano) AS anos FROM emendas WHERE ${activeWhere}`),
+      query(`SELECT COUNT(*) AS total, COUNT(DISTINCT NULLIF(TRIM(nome_autor),'')) AS autores, COUNT(DISTINCT ano) AS anos FROM emendas WHERE ${activeWhere}`),
       query(`SELECT CAST(ano AS VARCHAR) AS label, COUNT(*) AS n FROM emendas WHERE ${activeWhere} GROUP BY ano ORDER BY ano`),
       query(`SELECT COALESCE(NULLIF(TRIM(area_governo),''),'Não informado') AS label, COUNT(*) AS n FROM emendas WHERE ${activeWhere} GROUP BY 1 ORDER BY n DESC LIMIT 6`)
     ]);
     total=asNumber(metrics.total);
-    el('m-total').textContent=num(total);el('m-valor').textContent=money(metrics.valor);el('m-autores').textContent=num(metrics.autores);el('m-anos').textContent=num(metrics.anos);
+    el('m-total').textContent=num(total);el('m-valor').textContent='Em revisão';el('m-autores').textContent=num(metrics.autores);el('m-anos').textContent=num(metrics.anos);
     chart('chart-ano',byYear,'label','n');chart('chart-area',byArea,'label','n');
     el('exportar').disabled=total===0;
     await renderPage();
@@ -116,12 +116,12 @@ async function initialize(){
     await conn.query(`CREATE VIEW emendas AS ${FILES.map(year=>`SELECT * FROM read_parquet('emendas_${year}.parquet')`).join(' UNION ALL ')}`);
     const [[count]]=await Promise.all([query('SELECT COUNT(*) AS n FROM emendas')]);
     if(Number(count.n)!==29342)status(`Atenção: foram encontrados ${num(count.n)} registros; o conjunto validado possui 29.342.`,true);
-    await Promise.all([fillSelect('ano','ano'),fillSelect('autor','nome_autor'),fillSelect('tipo','tipo_emenda'),fillSelect('area','area_governo'),fillSelect('esfera','esfera_orcamentaria')]);
+    await Promise.all([fillSelect('ano','ano'),fillSelect('autor','nome_autor'),fillSelect('cargo','cargo_autor'),fillSelect('tipo','tipo_emenda'),fillSelect('realizacao','tipo_realizacao'),fillSelect('area','area_governo'),fillSelect('esfera','esfera_orcamentaria')]);
     ready=true;await refresh();
   }catch(error){console.error(error);status(`Não foi possível iniciar o Observatório: ${error.message}. O site precisa ser aberto via HTTP(S), com os quatro Parquets presentes.`,true);el('linhas').innerHTML='<tr><td colspan="7" class="empty">Não foi possível carregar a base.</td></tr>';}
 }
 el('aplicar').addEventListener('click',refresh);
-el('limpar').addEventListener('click',()=>{for(const id of ['busca','ano','autor','tipo','area','esfera'])el(id).value='';refresh();});
+el('limpar').addEventListener('click',()=>{for(const id of ['busca','ano','autor','cargo','tipo','realizacao','area','esfera'])el(id).value='';refresh();});
 el('busca').addEventListener('keydown',event=>{if(event.key==='Enter')refresh();});
 el('anterior').addEventListener('click',async()=>{if(page>0){page--;await renderPage();}});
 el('proxima').addEventListener('click',async()=>{if((page+1)*PAGE_SIZE<total){page++;await renderPage();}});
